@@ -7,15 +7,15 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="150b01a6-028f-48d3-97db-1ecfa766471d"
+    Name="ShanghaiTech-Antigen-AutoSubmit"
     Publisher="CN=FD9B4583-309F-46EC-ADA4-1CA4EDCA1A3A"
-    Version="1.0.0.0" />
+    Version="1.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="150b01a6-028f-48d3-97db-1ecfa766471d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>上科大抗原自动交</DisplayName>
-    <PublisherDisplayName>vhtmf</PublisherDisplayName>
+    <PublisherDisplayName>埃博拉酱</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
