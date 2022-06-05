@@ -1,0 +1,4 @@
+﻿[*.vb]
+
+# BC42104: 在为变量赋值之前，变量已被使用
+dotnet_diagnostic.BC42104.severity = suggestion

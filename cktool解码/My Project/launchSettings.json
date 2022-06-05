@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "cktool解码": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\vhtmf\\source\\repos\\上科大抗原自动交\\JS测试\\app.js\""
+    }
+  }
+}
