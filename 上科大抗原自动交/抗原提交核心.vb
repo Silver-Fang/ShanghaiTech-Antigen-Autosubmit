@@ -84,7 +84,7 @@ Public Module 抗原提交核心
 		预约表.Sort(Function(行1 As 简单预约表行, 行2 As 简单预约表行) (行1.预约时间 - 行2.预约时间).TotalSeconds)
 		行 = 预约表.First
 		Dim 下次调度 As Date = 现在 + 调度间隔,
-			提交结果 = "没有可以提交的预约"
+			提交结果 = 行提交结果.无可提交表单
 		If 行.预约时间 < 下次调度 Then
 			If 网络通畅 Then
 				For Each 调查项目 In ulQs.Children
@@ -152,23 +152,25 @@ Public Module 抗原提交核心
 						If 成功喵提醒 Then
 							Call HTTP客户端.GetAsync(喵提醒地址 & "提交成功")
 						End If
-						提交结果 = "提交成功"
+						提交结果 = 行提交结果.提交成功
 					Else
 						If 失败喵提醒 Then
 							Call HTTP客户端.GetAsync(喵提醒地址 & "提交失败")
 						End If
-						提交结果 = "提交失败"
+						提交结果 = 行提交结果.提交失败
 					End If
 				Next
 			Else
-				提交结果 = "网络不通"
+				提交结果 = 行提交结果.网络不通
 			End If
+		Else
+			提交结果 = 行提交结果.时间未到
 		End If
 		If 自动任务 Then
-			If 每日重试 AndAlso 提交结果 <> "提交成功" Then
+			If 每日重试 AndAlso 提交结果 <> 行提交结果.提交成功 AndAlso 提交结果 <> 行提交结果.时间未到 Then
 				行.预约时间 += 一天
 				预约表.RemoveAt(0)
-				预约表.Append(行)
+				预约表.Add(行)
 			End If
 			Dim 待调度列表 = 预约表.SkipWhile(Function(预约 As 简单预约表行) 预约.预约时间 < 下次调度)
 			自动任务 = 待调度列表.Any

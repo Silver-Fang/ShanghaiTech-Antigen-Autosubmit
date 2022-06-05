@@ -27,6 +27,30 @@ NotInheritable Class App
 	Private 数据文件 As StorageFile
 	Friend 帮助文档 As StorageFile
 
+	Async Function 载入预约数据() As Task
+		数据文件 = If(Await 数据目录.TryGetItemAsync("预约数据.bin"), Await 数据目录.CreateFileAsync("预约数据.bin"))
+		Dim 读入器 = New BinaryReader(Await 数据文件.OpenStreamForReadAsync)
+		Try
+			学号或工号 = 读入器.ReadUInt32
+			密码 = 读入器.ReadString
+			自动任务 = 读入器.ReadBoolean
+			每日重试 = 读入器.ReadBoolean
+			成功喵提醒 = 读入器.ReadBoolean
+			失败喵提醒 = 读入器.ReadBoolean
+			喵提醒码 = 读入器.ReadString
+			Dim 预约数 = 读入器.ReadInt32
+			Dim 新行 As 预约表行
+			For a = 1 To 预约数
+				新行 = Await 预约表行.读入(读入器)
+				If 新行 IsNot Nothing Then
+					预约数据表.Add(新行)
+				End If
+			Next
+		Catch ex As EndOfStreamException
+		Catch ex As ArgumentOutOfRangeException
+		End Try
+	End Function
+
 	''' <summary>
 	''' 在应用程序由最终用户正常启动时进行调用。
 	''' 当启动应用程序以打开特定的文件或显示时使用
@@ -51,28 +75,7 @@ NotInheritable Class App
 			' 将框架放在当前窗口中
 			Window.Current.Content = rootFrame
 		End If
-		数据文件 = If(Await 数据目录.TryGetItemAsync("预约数据.bin"), Await 数据目录.CreateFileAsync("预约数据.bin"))
-		Dim 读入器 = New BinaryReader(Await 数据文件.OpenStreamForReadAsync)
-		Try
-			学号或工号 = 读入器.ReadUInt32
-			密码 = 读入器.ReadString
-			自动任务 = 读入器.ReadBoolean
-			每日重试 = 读入器.ReadBoolean
-			成功喵提醒 = 读入器.ReadBoolean
-			失败喵提醒 = 读入器.ReadBoolean
-			喵提醒码 = 读入器.ReadString
-			Dim 预约数 = 读入器.ReadInt32
-			Dim 新行 As 预约表行
-			For a = 1 To 预约数
-				新行 = Await 预约表行.读入(读入器)
-				If 新行 IsNot Nothing Then
-					预约数据表.Add(新行)
-				End If
-			Next
-		Catch ex As EndOfStreamException
-		Catch ex As ArgumentOutOfRangeException
-		End Try
-		读入器.Close()
+		Await 载入预约数据()
 		帮助文档 = Await StorageFile.GetFileFromApplicationUriAsync(New Uri("ms-appx:///帮助文档.txt"))
 
 		If e.PrelaunchActivated = False Then

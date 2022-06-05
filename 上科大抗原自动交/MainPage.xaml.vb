@@ -167,6 +167,8 @@ Public NotInheritable Class MainPage
 		进度环.IsActive = True
 		Await 当前应用.保存预约()
 		任务提示.Text = Await 交抗原()
+		当前应用.预约数据表.Clear()
+		Call 当前应用.载入预约数据()
 		进度环.IsActive = False
 		立即提交.IsEnabled = True
 	End Sub
