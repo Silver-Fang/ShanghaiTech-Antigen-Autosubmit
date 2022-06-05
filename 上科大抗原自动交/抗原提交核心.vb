@@ -192,7 +192,7 @@ Public Module 抗原提交核心
 		If 自动任务 Then
 			Return $"{提交结果}。已预约下次提交：{下次调度}（±15分钟误差）"
 		Else
-			Return 提交结果
+			Return 提交结果.ToString()
 		End If
 	End Function
 
